@@ -24,6 +24,10 @@ Gem::Specification.new do |spec|
   end
   spec.require_paths = ['lib']
 
+  spec.add_development_dependency 'lex-emotion'
+  spec.add_development_dependency 'lex-identity'
+  spec.add_development_dependency 'lex-memory'
+  spec.add_development_dependency 'lex-tick'
   spec.add_development_dependency 'rspec', '~> 3.13'
   spec.add_development_dependency 'rubocop', '~> 1.60'
   spec.add_development_dependency 'rubocop-rspec', '~> 2.26'
