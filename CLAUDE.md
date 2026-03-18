@@ -7,7 +7,7 @@
 Domain consolidation gem for imagination, creativity, and offline simulation. Bundles 17 source extensions into one loadable unit under `Legion::Extensions::Agentic::Imagination`.
 
 **Gem**: `lex-agentic-imagination`
-**Version**: 0.1.0
+**Version**: 0.1.1
 **Namespace**: `Legion::Extensions::Agentic::Imagination`
 
 ## Sub-Modules
@@ -49,6 +49,6 @@ Dream phases map to `dormant_active` mode tick phases:
 
 ```bash
 bundle install   # includes path deps: lex-memory, lex-identity, lex-emotion, lex-tick
-bundle exec rspec        # 1887 examples, 0 failures
+bundle exec rspec        # 1893 examples, 0 failures
 bundle exec rubocop      # 0 offenses
 ```

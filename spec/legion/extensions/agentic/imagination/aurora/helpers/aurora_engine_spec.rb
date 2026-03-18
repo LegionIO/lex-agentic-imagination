@@ -15,6 +15,26 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Aurora::Helpers::Aurora
   end
 
   describe '#detect_aurora' do
+    it 'returns nil for an invalid aurora type' do
+      expect(detect(type: :unknown_type)).to be_nil
+    end
+
+    it 'accepts all valid AURORA_TYPES' do
+      Legion::Extensions::Agentic::Imagination::Aurora::Helpers::Constants::AURORA_TYPES.each do |t|
+        expect(detect(type: t)).to be_a(Legion::Extensions::Agentic::Imagination::Aurora::Helpers::AuroraEvent)
+      end
+    end
+
+    it 'returns nil for an invalid domain' do
+      expect(detect(domain: :invalid_domain)).to be_nil
+    end
+
+    it 'accepts all valid DOMAINS' do
+      Legion::Extensions::Agentic::Imagination::Aurora::Helpers::Constants::DOMAINS.each do |d|
+        expect(detect(domain: d)).to be_a(Legion::Extensions::Agentic::Imagination::Aurora::Helpers::AuroraEvent)
+      end
+    end
+
     it 'returns an AuroraEvent' do
       event = detect
       expect(event).to be_a(Legion::Extensions::Agentic::Imagination::Aurora::Helpers::AuroraEvent)

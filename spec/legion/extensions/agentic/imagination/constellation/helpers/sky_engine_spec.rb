@@ -8,6 +8,17 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Constellation::Helpers:
   end
 
   describe '#discover_star' do
+    it 'returns nil for an invalid spectral_class' do
+      expect(engine.discover_star(name: 'X', domain: :memory, content: 'test', spectral_class: :Z)).to be_nil
+    end
+
+    it 'accepts all valid SPECTRAL_CLASSES' do
+      Legion::Extensions::Agentic::Imagination::Constellation::Helpers::Constants::SPECTRAL_CLASSES.each do |sc|
+        s = engine.discover_star(name: sc.to_s, domain: :memory, content: 'test', spectral_class: sc)
+        expect(s).to be_a(Legion::Extensions::Agentic::Imagination::Constellation::Helpers::Star)
+      end
+    end
+
     it 'creates and stores a star' do
       s = engine.discover_star(name: 'Vega', domain: :memory, content: 'bright')
       expect(s).to be_a(Legion::Extensions::Agentic::Imagination::Constellation::Helpers::Star)

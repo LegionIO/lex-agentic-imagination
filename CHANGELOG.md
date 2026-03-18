@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-03-18
+
+### Changed
+- Enforce AURORA_TYPES enum validation in AuroraEngine#detect_aurora (returns nil for invalid type)
+- Enforce DOMAINS enum validation in AuroraEngine#detect_aurora (returns nil for invalid domain)
+- Enforce SPECTRAL_CLASSES enum validation in SkyEngine#discover_star (returns nil for invalid spectral_class)
+
 ## [0.1.0] - 2026-03-18
 
 ### Added

@@ -15,6 +15,9 @@ module Legion
               end
 
               def detect_aurora(type:, domain:, contributing_subsystems:, luminosity:, harmony_score:)
+                return nil unless AURORA_TYPES.include?(type.to_sym)
+                return nil unless DOMAINS.include?(domain.to_sym)
+
                 event = AuroraEvent.new(
                   aurora_type:             type,
                   domain:                  domain,

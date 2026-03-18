@@ -14,6 +14,7 @@ module Legion
 
               def discover_star(name:, domain:, content:, magnitude: nil, spectral_class: nil)
                 raise ArgumentError, 'sky catalog full' if @stars.size >= Constants::MAX_STARS
+                return nil if !spectral_class.nil? && !Constants::SPECTRAL_CLASSES.include?(spectral_class.to_sym)
 
                 star = Star.new(name: name, domain: domain, content: content,
                                 magnitude: magnitude, spectral_class: spectral_class)
