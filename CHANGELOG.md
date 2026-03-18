@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-03-18
+
+### Changed
+- Enforce MODES enum validation in Imagery::Runners::Imagination#simulate (returns nil for invalid mode)
+- Enforce RISK_TOLERANCES enum validation in Imagery::Runners::Imagination#simulate (returns nil for invalid risk_tolerance)
+
 ## [0.1.1] - 2026-03-18
 
 ### Changed

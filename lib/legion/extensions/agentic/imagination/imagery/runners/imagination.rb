@@ -11,6 +11,9 @@ module Legion
                                                           Legion::Extensions::Helpers.const_defined?(:Lex)
 
               def simulate(actions:, context: {}, mode: :prospective, risk_tolerance: :moderate, **)
+                return nil unless Helpers::Constants::MODES.include?(mode.to_sym)
+                return nil unless Helpers::Constants::RISK_TOLERANCES.include?(risk_tolerance.to_sym)
+
                 scenarios = actions.first(Helpers::Constants::MAX_SCENARIOS).map do |action|
                   build_scenario(action, context)
                 end

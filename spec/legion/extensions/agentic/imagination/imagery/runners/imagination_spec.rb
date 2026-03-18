@@ -37,6 +37,32 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Imagery::Runners::Imagi
       expect(conservative[:recommendation]).not_to be_nil
       expect(aggressive[:recommendation]).not_to be_nil
     end
+
+    it 'rejects invalid mode' do
+      result = client.simulate(actions: %w[deploy], mode: :nonexistent_value)
+      expect(result).to be_nil
+    end
+
+    it 'accepts all MODES' do
+      described_class_constants = Legion::Extensions::Agentic::Imagination::Imagery::Helpers::Constants::MODES
+      described_class_constants.each do |val|
+        result = client.simulate(actions: %w[deploy], mode: val)
+        expect(result).not_to be_nil, "Expected #{val.inspect} to be accepted"
+      end
+    end
+
+    it 'rejects invalid risk_tolerance' do
+      result = client.simulate(actions: %w[deploy], risk_tolerance: :nonexistent_value)
+      expect(result).to be_nil
+    end
+
+    it 'accepts all RISK_TOLERANCES' do
+      described_class_constants = Legion::Extensions::Agentic::Imagination::Imagery::Helpers::Constants::RISK_TOLERANCES
+      described_class_constants.each do |val|
+        result = client.simulate(actions: %w[deploy], risk_tolerance: val)
+        expect(result).not_to be_nil, "Expected #{val.inspect} to be accepted"
+      end
+    end
   end
 
   describe '#what_if' do
