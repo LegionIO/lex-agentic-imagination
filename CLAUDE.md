@@ -34,11 +34,12 @@ Domain consolidation gem for imagination, creativity, and offline simulation. Bu
 
 ## Cross-Domain Dependencies
 
-`Imagination::Dream` requires `lex-memory`, `lex-identity`, `lex-emotion`, and `lex-tick` at runtime. These are specified as path dependencies in the development Gemfile and as runtime dependencies in the gemspec.
+`Imagination::Dream` requires `lex-memory`, `lex-identity`, `lex-emotion`, and `lex-tick` at runtime. These are declared as development dependencies in the gemspec and resolved from RubyGems.
 
 ## Actors
 
 - `Imagination::Dream::Actors::DreamCycle` — runs every 300s, executes `execute_dream_cycle`
+- `Imagination::Prospection::Actors::Decay` — runs every 300s, executes `update_prospection`
 
 ## Tick Integration
 
@@ -48,7 +49,7 @@ Dream phases map to `dormant_active` mode tick phases:
 ## Development
 
 ```bash
-bundle install   # includes path deps: lex-memory, lex-identity, lex-emotion, lex-tick
-bundle exec rspec        # 1897 examples, 0 failures
+bundle install   # includes dev deps: lex-memory, lex-identity, lex-emotion, lex-tick
+bundle exec rspec        # 1855 examples, 0 failures
 bundle exec rubocop      # 0 offenses
 ```

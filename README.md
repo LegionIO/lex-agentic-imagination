@@ -33,6 +33,7 @@ Domain consolidation gem for imagination, creativity, and offline simulation. Bu
 ## Actors
 
 - `Imagination::Dream::Actors::DreamCycle` — runs every 300s, executes `execute_dream_cycle`
+- `Imagination::Prospection::Actors::Decay` — runs every 300s, executes `update_prospection`
 
 ## Installation
 
@@ -44,7 +45,7 @@ gem 'lex-agentic-imagination'
 
 ```bash
 bundle install
-bundle exec rspec        # 1897 examples, 0 failures
+bundle exec rspec        # 1855 examples, 0 failures
 bundle exec rubocop      # 0 offenses
 ```
 
