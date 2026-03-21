@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-03-21
+
+### Changed
+- Spec suite expanded to 1897 examples (0 failures)
+
 ## [0.1.2] - 2026-03-18
 
 ### Changed
