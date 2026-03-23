@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-03-22
+
+### Changed
+- Add 7 legion-* runtime dependencies to gemspec (legion-cache, legion-crypt, legion-data, legion-json, legion-logging, legion-settings, legion-transport)
+- Update spec_helper to use real sub-gem helpers with Helpers::Lex including all 7 helper modules
+
 ## [0.1.3] - 2026-03-21
 
 ### Changed
