@@ -267,6 +267,19 @@ module Legion
                 { traces_written: traces.size, dream_store_cleared: true }
               end
 
+              def phase_knowledge_promotion(**)
+                return { status: :skipped, reason: :apollo_unavailable } unless apollo_available?
+
+                runner = Object.new.extend(Legion::Extensions::Apollo::Runners::Knowledge)
+                promoted = promote_novel_associations(runner) + promote_resolved_contradictions(runner)
+
+                Legion::Logging.debug "[dream] knowledge_promotion: promoted=#{promoted}"
+                { promoted: promoted }
+              rescue StandardError => e
+                Legion::Logging.warn "[dream] knowledge_promotion failed: #{e.message}"
+                { status: :error, error: e.message }
+              end
+
               def phase_dream_reflection(**)
                 return { status: :skipped, reason: :extension_not_loaded } unless reflection_available?
 
@@ -314,6 +327,67 @@ module Legion
                   Legion::Extensions::Narrator::Runners.const_defined?(:Narrator)
               rescue StandardError
                 false
+              end
+
+              def promote_novel_associations(knowledge_runner)
+                walk_results = @phase_data[:walk_results] || []
+                store = memory.send(:default_store)
+                count = 0
+
+                walk_results.select { |w| w[:novelty_score] && w[:novelty_score] > 0.8 }.each do |walk|
+                  path_traces = walk[:path]&.filter_map { |id| store.get(id) }
+                  next if path_traces.size < 2
+
+                  payloads = path_traces.map { |t| summarize_trace_payload(t) }.compact
+                  next if payloads.empty?
+
+                  knowledge_runner.handle_ingest(
+                    content:         "Novel association discovered: #{payloads.join(' -> ')}",
+                    content_type:    :association,
+                    tags:            ['dream_cycle', 'association_walk', "novelty:#{walk[:novelty_score].round(2)}"],
+                    source_agent:    'dream-cycle',
+                    source_provider: 'legion',
+                    source_channel:  'dream_association_walk',
+                    context:         { path_length: walk[:path]&.size, novelty: walk[:novelty_score] }
+                  )
+                  count += 1
+                end
+                count
+              end
+
+              def promote_resolved_contradictions(knowledge_runner)
+                contradictions = @phase_data[:contradictions] || []
+                count = 0
+
+                contradictions.select { |c| c[:resolution] == :resolved && c[:reasoning] }.each do |contra|
+                  knowledge_runner.handle_ingest(
+                    content:         "Contradiction resolved: #{contra[:reasoning][0, 500]}",
+                    content_type:    :fact,
+                    tags:            ['dream_cycle', 'contradiction_resolved', "domain:#{contra[:domain]}"],
+                    source_agent:    'dream-cycle',
+                    source_provider: 'legion',
+                    source_channel:  'dream_contradiction',
+                    context:         { domain: contra[:domain], winner_id: contra[:winner_id] }
+                  )
+                  count += 1
+                end
+                count
+              end
+
+              def apollo_available?
+                defined?(Legion::Extensions::Apollo::Runners::Knowledge) &&
+                  defined?(Legion::Data::Model::ApolloEntry)
+              rescue StandardError
+                false
+              end
+
+              def summarize_trace_payload(trace)
+                payload = trace[:content_payload]
+                case payload
+                when String then payload[0, 120]
+                when Hash then payload.values.first(3).map { |v| v.to_s[0, 40] }.join(', ')
+                else payload.to_s[0, 120]
+                end
               end
 
               def dream_store

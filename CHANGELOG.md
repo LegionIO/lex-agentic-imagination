@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.5] - 2026-03-23
+
+### Added
+- Dream cycle knowledge promotion phase: promotes high-novelty association discoveries and resolved contradictions to Apollo knowledge graph
+- `phase_knowledge_promotion` ingests novel walks (novelty > 0.8) as associations and resolved contradictions as facts
+- Dream journal now includes Phase 7: Knowledge Promotion section with promotion count
+- Soft guard: phase is a no-op when lex-apollo or legion-data are not loaded
 
 ## [0.1.4] - 2026-03-22
 

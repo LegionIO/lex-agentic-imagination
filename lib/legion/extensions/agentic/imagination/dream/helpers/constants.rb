@@ -22,6 +22,7 @@ module Legion
                 identity_entropy_check
                 agenda_formation
                 consolidation_commit
+                knowledge_promotion
                 dream_reflection
                 dream_narration
               ].freeze

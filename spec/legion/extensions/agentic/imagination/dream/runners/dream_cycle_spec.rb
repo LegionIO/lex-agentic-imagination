@@ -15,12 +15,12 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Runners::DreamCy
   let(:trace_helper) { Legion::Extensions::Memory::Helpers::Trace }
 
   describe '#execute_dream_cycle' do
-    it 'returns a result hash with all eight phases' do
+    it 'returns a result hash with all nine phases' do
       result = client.execute_dream_cycle
       expect(result[:phases].keys).to contain_exactly(
         :memory_audit, :association_walk, :contradiction_resolution,
         :identity_entropy_check, :agenda_formation, :consolidation_commit,
-        :dream_reflection, :dream_narration
+        :knowledge_promotion, :dream_reflection, :dream_narration
       )
     end
 

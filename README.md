@@ -5,7 +5,7 @@ Domain consolidation gem for imagination, creativity, and offline simulation. Bu
 ## Overview
 
 **Gem**: `lex-agentic-imagination`
-**Version**: 0.1.2
+**Version**: 0.1.0
 **Namespace**: `Legion::Extensions::Agentic::Imagination`
 
 ## Sub-Modules
@@ -45,7 +45,7 @@ gem 'lex-agentic-imagination'
 
 ```bash
 bundle install
-bundle exec rspec        # 1855 examples, 0 failures
+bundle exec rspec        # 1885 examples, 0 failures
 bundle exec rubocop      # 0 offenses
 ```
 

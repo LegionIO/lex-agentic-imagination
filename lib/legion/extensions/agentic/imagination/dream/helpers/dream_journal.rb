@@ -38,6 +38,7 @@ module Legion
                 section_identity_entropy(lines, results, phase_data)
                 section_agenda(lines, results, phase_data)
                 section_consolidation(lines, results)
+                section_knowledge_promotion(lines, results)
                 section_summary(lines, results, phase_data)
                 lines.join("\n")
               end
@@ -160,6 +161,18 @@ module Legion
                 lines << ''
               end
 
+              def section_knowledge_promotion(lines, results)
+                promo = results[:knowledge_promotion] || {}
+                lines << '## Phase 7: Knowledge Promotion'
+                lines << ''
+                lines << if promo[:status] == :skipped
+                           "- Skipped: #{promo[:reason]}"
+                         else
+                           "- Insights promoted to Apollo: #{promo[:promoted]}"
+                         end
+                lines << ''
+              end
+
               def section_summary(lines, results, phase_data)
                 audit = results[:memory_audit] || {}
                 contra = results[:contradiction_resolution] || {}
@@ -179,6 +192,7 @@ module Legion
                 lines << "| Contradictions resolved | #{resolved} |"
                 lines << "| Agenda items formed | #{(results[:agenda_formation] || {})[:agenda_items]} |"
                 lines << "| Traces consolidated | #{(results[:consolidation_commit] || {})[:traces_written]} |"
+                lines << "| Knowledge promoted | #{(results[:knowledge_promotion] || {})[:promoted]} |"
               end
 
               def format_resolutions(lines, resolutions)
@@ -220,8 +234,9 @@ module Legion
 
               private_class_method :section_narrative, :section_memory_audit, :section_association_walk,
                                    :section_contradiction_resolution, :section_identity_entropy,
-                                   :section_agenda, :section_consolidation, :section_summary,
-                                   :format_resolutions, :extract_payload, :truncate, :summarize_content
+                                   :section_agenda, :section_consolidation, :section_knowledge_promotion,
+                                   :section_summary, :format_resolutions, :extract_payload,
+                                   :truncate, :summarize_content
             end
           end
         end
