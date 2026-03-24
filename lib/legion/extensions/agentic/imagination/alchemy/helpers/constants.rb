@@ -51,7 +51,7 @@ module Legion
                 [(0.6...0.8),  :argentum],
                 [(0.4...0.6),  :cuprum],
                 [(0.2...0.4),  :ferrum],
-                [(..0.2),      :plumbum]
+                [..0.2,        :plumbum]
               ].freeze
 
               # Potency labels
@@ -60,7 +60,7 @@ module Legion
                 [(0.6...0.8),  :potent],
                 [(0.4...0.6),  :moderate],
                 [(0.2...0.4),  :weak],
-                [(..0.2),      :inert]
+                [..0.2,        :inert]
               ].freeze
 
               def self.label_for(table, value)

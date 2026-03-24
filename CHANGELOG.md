@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.8] - 2026-03-24
+
+### Fixed
+- Remove redundant parentheses around beginless ranges in alchemy, constellation, and garden constants (rubocop Style/RedundantParentheses)
+
 ## [0.1.7] - 2026-03-24
 
 ### Added
