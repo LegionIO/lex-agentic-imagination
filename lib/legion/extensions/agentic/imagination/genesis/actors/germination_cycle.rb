@@ -6,19 +6,19 @@ module Legion
   module Extensions
     module Agentic
       module Imagination
-        module Prospection
+        module Genesis
           module Actor
-            class Decay < Legion::Extensions::Actors::Every
+            class GerminationCycle < Legion::Extensions::Actors::Every
               def runner_class
-                Legion::Extensions::Agentic::Imagination::Prospection::Runners::Prospection
+                Legion::Extensions::Agentic::Imagination::Genesis::Runners::Genesis
               end
 
               def runner_function
-                'update_prospection'
+                'germinate_seed'
               end
 
               def time
-                1800
+                900
               end
 
               def run_now?

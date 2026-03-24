@@ -6,19 +6,19 @@ module Legion
   module Extensions
     module Agentic
       module Imagination
-        module Prospection
+        module MentalSimulation
           module Actor
-            class Decay < Legion::Extensions::Actors::Every
+            class SimulationReview < Legion::Extensions::Actors::Every
               def runner_class
-                Legion::Extensions::Agentic::Imagination::Prospection::Runners::Prospection
+                Legion::Extensions::Agentic::Imagination::MentalSimulation::Runners::MentalSimulation
               end
 
               def runner_function
-                'update_prospection'
+                'favorable_simulations_report'
               end
 
               def time
-                1800
+                3600
               end
 
               def run_now?

@@ -6,19 +6,19 @@ module Legion
   module Extensions
     module Agentic
       module Imagination
-        module Prospection
+        module Volcano
           module Actor
-            class Decay < Legion::Extensions::Actors::Every
+            class PressureMonitor < Legion::Extensions::Actors::Every
               def runner_class
-                Legion::Extensions::Agentic::Imagination::Prospection::Runners::Prospection
+                Legion::Extensions::Agentic::Imagination::Volcano::Runners::CognitiveVolcano
               end
 
               def runner_function
-                'update_prospection'
+                'pressure_status'
               end
 
               def time
-                1800
+                300
               end
 
               def run_now?

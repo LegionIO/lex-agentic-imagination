@@ -1,2 +1,5 @@
 Gemfile.lock
 logs/
+.bundle/
+.rspec_status
+vendor/

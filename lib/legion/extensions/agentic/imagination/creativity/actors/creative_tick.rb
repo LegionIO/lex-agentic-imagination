@@ -6,19 +6,19 @@ module Legion
   module Extensions
     module Agentic
       module Imagination
-        module Prospection
+        module Creativity
           module Actor
-            class Decay < Legion::Extensions::Actors::Every
+            class CreativeTick < Legion::Extensions::Actors::Every
               def runner_class
-                Legion::Extensions::Agentic::Imagination::Prospection::Runners::Prospection
+                Legion::Extensions::Agentic::Imagination::Creativity::Runners::Creativity
               end
 
               def runner_function
-                'update_prospection'
+                'creative_tick'
               end
 
               def time
-                1800
+                600
               end
 
               def run_now?

@@ -6,19 +6,19 @@ module Legion
   module Extensions
     module Agentic
       module Imagination
-        module Prospection
+        module Lucidity
           module Actor
-            class Decay < Legion::Extensions::Actors::Every
+            class LucidityCheck < Legion::Extensions::Actors::Every
               def runner_class
-                Legion::Extensions::Agentic::Imagination::Prospection::Runners::Prospection
+                Legion::Extensions::Agentic::Imagination::Lucidity::Runners::CognitiveLucidity
               end
 
               def runner_function
-                'update_prospection'
+                'lucidity_status'
               end
 
               def time
-                1800
+                600
               end
 
               def run_now?
