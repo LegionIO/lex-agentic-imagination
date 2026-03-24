@@ -38,8 +38,19 @@ Domain consolidation gem for imagination, creativity, and offline simulation. Bu
 
 ## Actors
 
-- `Imagination::Dream::Actors::DreamCycle` — runs every 300s, executes `execute_dream_cycle`
-- `Imagination::Prospection::Actors::Decay` — runs every 300s, executes `update_prospection`
+Background actors enable autonomous periodic processing:
+
+| Actor | Interval | Function | Purpose |
+|---|---|---|---|
+| `Dream::Actors::DreamCycle` | 300s | `execute_dream_cycle` | Eight-phase dream cycle execution |
+| `Prospection::Actors::Decay` | 300s | `update_prospection` | Decay old prospection scenarios |
+| `Creativity::Actors::CreativeTick` | 600s | `creative_tick` | Harvest seeds, incubate ideas |
+| `EmbodiedSimulation::Actors::SimulationDecay` | 300s | `update_embodied_simulation` | Decay embodied simulations |
+| `TimeTravel::Actors::JourneyDecay` | 300s | `update_mental_time_travel` | Decay mental time travel journeys |
+| `MentalSimulation::Actors::SimulationReview` | 3600s | `favorable_simulations_report` | Review favorable simulations |
+| `Genesis::Actors::GerminationCycle` | 900s | `genesis_report` | Genesis lifecycle report |
+| `Volcano::Actors::PressureMonitor` | 300s | `pressure_status` | Monitor magma pressure status |
+| `Lucidity::Actors::LucidityCheck` | 600s | `lucidity_status` | Meta-awareness sweep |
 
 ## Tick Integration
 
