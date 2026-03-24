@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7] - 2026-03-24
+
+### Added
+- Mind Growth integration in `phase_agenda_formation`: calls `MindGrowth::Runners::DreamIdeation.dream_agenda_items` when available and injects architectural gap items into the dream agenda
+- `mind_growth_available?` private guard method using `defined?()` for safe optional dependency check
+- Errors from MindGrowth are rescued and logged as warnings so agenda formation always continues
+
 ## [0.1.6] - 2026-03-23
 
 ### Changed

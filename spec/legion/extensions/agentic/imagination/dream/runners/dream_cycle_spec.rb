@@ -105,6 +105,54 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Runners::DreamCy
     end
   end
 
+  describe '#phase_agenda_formation mind_growth integration' do
+    before do
+      client.phase_memory_audit
+    end
+
+    context 'when MindGrowth is available and returns gap items' do
+      let(:gap_items) { [{ type: :curious, content: { description: 'missing module' }, weight: 0.7 }] }
+
+      before do
+        stub_const('Legion::Extensions::MindGrowth::Runners::DreamIdeation', Class.new)
+        allow(Legion::Extensions::MindGrowth::Runners::DreamIdeation)
+          .to receive(:dream_agenda_items)
+          .and_return({ success: true, items: gap_items, count: 1 })
+      end
+
+      it 'injects gap items into the agenda' do
+        result = client.phase_agenda_formation
+        expect(result[:agenda_items]).to be >= 1
+      end
+
+      it 'calls dream_agenda_items on DreamIdeation' do
+        client.phase_agenda_formation
+        expect(Legion::Extensions::MindGrowth::Runners::DreamIdeation).to have_received(:dream_agenda_items)
+      end
+    end
+
+    context 'when MindGrowth is not defined' do
+      it 'builds agenda without error' do
+        result = client.phase_agenda_formation
+        expect(result).to have_key(:agenda_items)
+      end
+    end
+
+    context 'when MindGrowth raises an error' do
+      before do
+        stub_const('Legion::Extensions::MindGrowth::Runners::DreamIdeation', Class.new)
+        allow(Legion::Extensions::MindGrowth::Runners::DreamIdeation)
+          .to receive(:dream_agenda_items)
+          .and_raise(StandardError, 'connection refused')
+      end
+
+      it 'rescues the error and agenda formation continues' do
+        result = client.phase_agenda_formation
+        expect(result).to have_key(:agenda_items)
+      end
+    end
+  end
+
   describe '#phase_consolidation_commit' do
     it 'writes agenda traces to memory and clears dream store' do
       client.dream_store.add_agenda_item(type: :curious, content: { path: %w[a b] }, weight: 0.8)

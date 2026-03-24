@@ -239,6 +239,19 @@ module Legion
                   entropy:           entropy
                 )
 
+                # Mind Growth integration: inject architectural gap agenda items during dreams
+                if mind_growth_available?
+                  begin
+                    gap_result = Legion::Extensions::MindGrowth::Runners::DreamIdeation.dream_agenda_items
+                    if gap_result[:success] && gap_result[:items]&.any?
+                      items.concat(gap_result[:items])
+                      Legion::Logging.debug "[dream] mind_growth injected #{gap_result[:count]} architectural gap items"
+                    end
+                  rescue StandardError => e
+                    Legion::Logging.warn "[dream] mind_growth integration failed: #{e.message}"
+                  end
+                end
+
                 items.each do |item|
                   dream_store.add_agenda_item(type: item[:type], content: item[:content], weight: item[:weight])
                 end
@@ -325,6 +338,12 @@ module Legion
                 Legion::Extensions.const_defined?(:Narrator) &&
                   Legion::Extensions::Narrator.const_defined?(:Runners) &&
                   Legion::Extensions::Narrator::Runners.const_defined?(:Narrator)
+              rescue StandardError
+                false
+              end
+
+              def mind_growth_available?
+                defined?(Legion::Extensions::MindGrowth::Runners::DreamIdeation)
               rescue StandardError
                 false
               end
