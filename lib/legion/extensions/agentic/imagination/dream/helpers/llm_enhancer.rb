@@ -66,11 +66,30 @@ module Legion
               # --- Private helpers ---
 
               def llm_ask(prompt)
-                chat = Legion::LLM.chat
-                chat.with_instructions(DREAM_SYSTEM_PROMPT)
-                chat.ask(prompt)
+                if pipeline_available?
+                  response = Legion::LLM::Pipeline::GaiaCaller.chat(
+                    message: prompt,
+                    phase:   'dream',
+                    caller:  { extension: 'lex-agentic-imagination', mode: :dream }
+                  )
+                  content = response&.message&.dig(:content)
+                  ::Struct.new(:content).new(content) if content
+                else
+                  chat = Legion::LLM.chat
+                  chat.with_instructions(DREAM_SYSTEM_PROMPT)
+                  chat.ask(prompt)
+                end
               end
               private_class_method :llm_ask
+
+              def pipeline_available?
+                !!(defined?(Legion::LLM::Pipeline::GaiaCaller) &&
+                   Legion::LLM.respond_to?(:pipeline_enabled?) &&
+                   Legion::LLM.pipeline_enabled?)
+              rescue StandardError
+                false
+              end
+              private_class_method :pipeline_available?
 
               def build_contradiction_prompt(trace_a, trace_b, strategy)
                 <<~PROMPT
