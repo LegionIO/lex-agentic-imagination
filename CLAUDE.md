@@ -46,6 +46,10 @@ Domain consolidation gem for imagination, creativity, and offline simulation. Bu
 Dream phases map to `dormant_active` mode tick phases:
 `memory_audit` → `association_walk` → `contradiction_resolution` → `identity_entropy_check` → `agenda_formation` → `consolidation_commit` → `dream_reflection` → `dream_narration`
 
+## Mind-Growth Integration
+
+Dream cycle's `phase_agenda_formation` checks for `Legion::Extensions::MindGrowth::Runners::DreamIdeation` and injects architectural gap agenda items when available (v0.1.7).
+
 ## Development
 
 ```bash
