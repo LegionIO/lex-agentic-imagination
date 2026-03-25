@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.9] - 2026-03-25
+
+### Added
+- Cross-module integration helper (`Helpers::CrossModule`) with pipeline mapping: creativity→genesis, genesis→greenhouse, greenhouse→garden, volcano→aurora, imagery→prospection
+- Historical calibration for imagery simulation: `estimate_success_likelihood` now uses `simulation_store.simulation_accuracy` as base instead of hardcoded 0.5
+- 7 new actors: creativity/maintenance, embodied_simulation/maintenance, time_travel/maintenance, aurora/decay, greenhouse/maintenance, alchemy/decay, mental_simulation/maintenance
+- `Alchemy::Runners::CognitiveAlchemy#decay_all` method for periodic substance decay
+- Specs for all new actors and cross-module integration
+
+### Fixed
+- Cross-module spec uses `hide_const` for proper guard-path testing
+
 ## [0.1.8] - 2026-03-24
 
 ### Fixed

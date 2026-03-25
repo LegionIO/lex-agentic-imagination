@@ -4,7 +4,7 @@ module Legion
   module Extensions
     module Agentic
       module Imagination
-        VERSION = '0.1.8'
+        VERSION = '0.1.9'
       end
     end
   end
