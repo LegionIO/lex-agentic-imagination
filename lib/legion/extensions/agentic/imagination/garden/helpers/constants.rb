@@ -25,7 +25,7 @@ module Legion
                 [(0.6...0.8),  :thriving],
                 [(0.4...0.6),  :growing],
                 [(0.2...0.4),  :wilting],
-                [(..0.2),      :withered]
+                [..0.2,        :withered]
               ].freeze
 
               FERTILITY_LABELS = [
@@ -33,7 +33,7 @@ module Legion
                 [(0.6...0.8),  :rich],
                 [(0.4...0.6),  :adequate],
                 [(0.2...0.4),  :poor],
-                [(..0.2),      :barren]
+                [..0.2,        :barren]
               ].freeze
 
               def self.label_for(table, value)

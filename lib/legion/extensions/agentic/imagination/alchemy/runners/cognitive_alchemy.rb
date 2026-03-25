@@ -56,6 +56,12 @@ module Legion
                   count: results.size }
               end
 
+              def decay_all(rate: Helpers::Constants::SUBSTANCE_DECAY, engine: nil, **)
+                eng = resolve_engine(engine)
+                eng.decay_all!(rate: rate)
+                { success: true, remaining: eng.all_substances.size }
+              end
+
               def alchemy_status(engine: nil, **)
                 eng = resolve_engine(engine)
                 { success: true, report: eng.alchemy_report }

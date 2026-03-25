@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+module Legion
+  module Extensions
+    module Agentic
+      module Imagination
+        module Creativity
+          module Actors
+            class Maintenance < Legion::Extensions::Actors::Every
+              def runner_class = Runners::Creativity
+              def runner_function = 'creative_tick'
+              def time = 30
+              def use_runner? = false
+              def check_subtask? = false
+              def generate_task? = false
+            end
+          end
+        end
+      end
+    end
+  end
+end
