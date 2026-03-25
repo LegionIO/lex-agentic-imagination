@@ -72,6 +72,12 @@ module Legion
                 { simulations: sims.map(&:to_h), count: sims.size }
               end
 
+              def prune_completed(**)
+                pruned = engine.prune_simulations
+                Legion::Logging.debug "[mental_simulation] pruned #{pruned} completed simulations"
+                { success: true, pruned: pruned }
+              end
+
               def mental_simulation_stats(**)
                 stats = engine.to_h.except(:simulations)
                 Legion::Logging.debug "[mental_simulation] stats total=#{stats[:total_simulations]}"

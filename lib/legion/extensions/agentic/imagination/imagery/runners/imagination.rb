@@ -123,11 +123,18 @@ module Legion
               end
 
               def estimate_success_likelihood(_action, context)
-                base = 0.5
+                base = historical_base_accuracy
                 base += 0.1 if context[:familiar]
                 base += 0.1 if context[:alignment].is_a?(Numeric) && context[:alignment] > 0.6
                 base -= 0.1 if context[:risky]
                 base.clamp(0.1, 0.9)
+              end
+
+              def historical_base_accuracy
+                accuracy = simulation_store.simulation_accuracy
+                return 0.5 if accuracy.nil?
+
+                accuracy.clamp(0.2, 0.8)
               end
 
               def estimate_failure_likelihood(_action, context)

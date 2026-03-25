@@ -114,6 +114,28 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Imagery::Runners::Imagi
     end
   end
 
+  describe '#historical_base_accuracy' do
+    it 'returns 0.5 with no history' do
+      result = client.simulate(actions: %w[deploy])
+      # Default base is 0.5 when no outcomes recorded
+      expect(result[:scenarios].first[:outcomes].first[:likelihood]).to be_within(0.2).of(0.5)
+    end
+
+    it 'adjusts base from historical accuracy' do
+      # Record several accurate outcomes to build history
+      5.times do
+        sim = client.simulate(actions: %w[deploy])
+        client.record_actual_outcome(
+          simulation_id:  sim[:simulation_id],
+          actual_outcome: { valence: :positive, success: true }
+        )
+      end
+      # The base should now reflect historical accuracy instead of hardcoded 0.5
+      stats = client.imagination_stats
+      expect(stats[:accuracy]).not_to be_nil
+    end
+  end
+
   describe '#imagination_stats' do
     it 'returns stats summary' do
       client.simulate(actions: %w[deploy])

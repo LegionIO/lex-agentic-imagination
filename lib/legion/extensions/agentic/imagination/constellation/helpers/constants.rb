@@ -34,7 +34,7 @@ module Legion
                 [(0.6...0.8),  :giant],
                 [(0.4...0.6),  :main_sequence],
                 [(0.2...0.4),  :dwarf],
-                [(..0.2),      :brown_dwarf]
+                [..0.2,        :brown_dwarf]
               ].freeze
 
               # Constellation maturity labels
@@ -43,7 +43,7 @@ module Legion
                 [(0.6...0.8),  :established],
                 [(0.4...0.6),  :forming],
                 [(0.2...0.4),  :nascent],
-                [(..0.2),      :proto]
+                [..0.2,        :proto]
               ].freeze
 
               def self.label_for(table, value)
