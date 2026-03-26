@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Helpers::AssociationWalker do
-  let(:trace_helper) { Legion::Extensions::Memory::Helpers::Trace }
-  let(:memory_store) { Legion::Extensions::Memory::Helpers::Store.new }
+  let(:trace_helper) { Legion::Extensions::Agentic::Memory::Trace::Helpers::Trace }
+  let(:memory_store) { Legion::Extensions::Agentic::Memory::Trace::Helpers::Store.new }
 
   let(:trace_a) do
     trace_helper.new_trace(
@@ -112,7 +112,7 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Helpers::Associa
 
     it 'returns nil when no unresolved episodic traces exist' do
       # Only b and c are in a fresh store with no unresolved episodics
-      fresh_store = Legion::Extensions::Memory::Helpers::Store.new
+      fresh_store = Legion::Extensions::Agentic::Memory::Trace::Helpers::Store.new
       fresh_store.store(trace_b)
       fresh_store.store(trace_c)
 

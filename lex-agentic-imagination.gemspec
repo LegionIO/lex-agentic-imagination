@@ -32,9 +32,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'legion-settings',  '>= 1.3.14'
   spec.add_dependency 'legion-transport', '>= 1.3.9'
 
+  spec.add_development_dependency 'lex-agentic-memory'
   spec.add_development_dependency 'lex-emotion'
   spec.add_development_dependency 'lex-identity'
-  spec.add_development_dependency 'lex-memory'
   spec.add_development_dependency 'lex-tick'
   spec.add_development_dependency 'rspec', '~> 3.13'
   spec.add_development_dependency 'rubocop', '~> 1.60'

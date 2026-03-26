@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe 'Dream cycle integration' do
-  let(:memory_store) { Legion::Extensions::Memory::Helpers::Store.new }
-  let(:memory_client) { Legion::Extensions::Memory::Client.new(store: memory_store) }
+  let(:memory_store) { Legion::Extensions::Agentic::Memory::Trace::Helpers::Store.new }
+  let(:memory_client) { Legion::Extensions::Agentic::Memory::Trace::Client.new(store: memory_store) }
   let(:identity_client) { Legion::Extensions::Identity::Client.new }
   let(:emotion_client) { Legion::Extensions::Emotion::Client.new }
   let(:tick_client) { Legion::Extensions::Tick::Client.new(mode: :dormant) }
@@ -11,7 +11,7 @@ RSpec.describe 'Dream cycle integration' do
       memory: memory_client, identity: identity_client, emotion: emotion_client
     )
   end
-  let(:trace_helper) { Legion::Extensions::Memory::Helpers::Trace }
+  let(:trace_helper) { Legion::Extensions::Agentic::Memory::Trace::Helpers::Trace }
 
   it 'runs a complete dream cycle with populated memory' do
     # 1. Seed memory with 10 episodic traces (some unresolved)

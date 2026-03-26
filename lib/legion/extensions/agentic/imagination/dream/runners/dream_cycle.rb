@@ -79,7 +79,7 @@ module Legion
                 candidates = store.all_traces.select do |t|
                   t[:trace_type] == :episodic &&
                     t[:reinforcement_count] >= CONSOLIDATION_CANDIDATE_THRESHOLD &&
-                    t[:strength] < Legion::Extensions::Memory::Helpers::Trace::STARTING_STRENGTHS[:episodic]
+                    t[:strength] < Legion::Extensions::Agentic::Memory::Trace::Helpers::Trace::STARTING_STRENGTHS[:episodic]
                 end
                 candidates.each do |t|
                   t[:consolidation_candidate] = true
@@ -319,7 +319,7 @@ module Legion
               private
 
               def memory
-                @memory ||= Legion::Extensions::Memory::Client.new if defined?(Legion::Extensions::Memory::Client)
+                @memory ||= Legion::Extensions::Agentic::Memory::Trace::Client.new if defined?(Legion::Extensions::Agentic::Memory::Trace::Client)
               end
 
               def identity

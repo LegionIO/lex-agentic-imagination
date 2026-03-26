@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Runners::DreamCycle do
-  let(:memory_store)    { Legion::Extensions::Memory::Helpers::Store.new }
-  let(:memory_client)   { Legion::Extensions::Memory::Client.new(store: memory_store) }
+  let(:memory_store)    { Legion::Extensions::Agentic::Memory::Trace::Helpers::Store.new }
+  let(:memory_client)   { Legion::Extensions::Agentic::Memory::Trace::Client.new(store: memory_store) }
   let(:identity_client) { Legion::Extensions::Identity::Client.new }
   let(:emotion_client)  { Legion::Extensions::Emotion::Client.new }
   let(:client) do
@@ -12,7 +12,7 @@ RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Runners::DreamCy
       emotion:  emotion_client
     )
   end
-  let(:trace_helper) { Legion::Extensions::Memory::Helpers::Trace }
+  let(:trace_helper) { Legion::Extensions::Agentic::Memory::Trace::Helpers::Trace }
 
   describe '#execute_dream_cycle' do
     it 'returns a result hash with all nine phases' do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Client do
-  let(:memory_client)   { Legion::Extensions::Memory::Client.new }
+  let(:memory_client)   { Legion::Extensions::Agentic::Memory::Trace::Client.new }
   let(:identity_client) { Legion::Extensions::Identity::Client.new }
   let(:emotion_client)  { Legion::Extensions::Emotion::Client.new }
 

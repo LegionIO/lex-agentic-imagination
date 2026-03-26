@@ -56,7 +56,7 @@ module Legion
 
               def to_semantic_traces(agenda_items)
                 agenda_items.map do |item|
-                  Legion::Extensions::Memory::Helpers::Trace.new_trace(
+                  Legion::Extensions::Agentic::Memory::Trace::Helpers::Trace.new_trace(
                     type:                :semantic,
                     content_payload:     { dream_agenda: item[:type], **item[:content] },
                     emotional_intensity: item[:weight],

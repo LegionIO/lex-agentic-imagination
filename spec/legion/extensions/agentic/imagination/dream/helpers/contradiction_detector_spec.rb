@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Legion::Extensions::Agentic::Imagination::Dream::Helpers::ContradictionDetector do
-  let(:trace_helper) { Legion::Extensions::Memory::Helpers::Trace }
-  let(:store) { Legion::Extensions::Memory::Helpers::Store.new }
+  let(:trace_helper) { Legion::Extensions::Agentic::Memory::Trace::Helpers::Trace }
+  let(:store) { Legion::Extensions::Agentic::Memory::Trace::Helpers::Store.new }
 
   describe '.detect' do
     it 'finds contradictions between same-domain traces with opposing valence' do

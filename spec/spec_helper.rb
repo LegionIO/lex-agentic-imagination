@@ -42,8 +42,8 @@ end
 $LOADED_FEATURES << 'legion/extensions/actors/every'
 $LOADED_FEATURES << 'legion/extensions/actors/once'
 
-require 'legion/extensions/memory'
-require 'legion/extensions/memory/client'
+require 'legion/extensions/agentic/memory/trace'
+require 'legion/extensions/agentic/memory/trace/client'
 require 'legion/extensions/identity'
 require 'legion/extensions/identity/client'
 require 'legion/extensions/emotion'

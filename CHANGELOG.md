@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10] - 2026-03-26
+
+### Changed
+- Migrate all memory references from `lex-memory` to `lex-agentic-memory` namespace
+- Update gemspec dev dependency from `lex-memory` to `lex-agentic-memory`
+- Dream cycle, client, and agenda helpers now use `Agentic::Memory::Trace` namespace
+
 ## [0.1.9] - 2026-03-25
 
 ### Added
