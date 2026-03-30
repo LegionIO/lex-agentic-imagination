@@ -43,7 +43,7 @@ module Legion
                 results = {}
 
                 unless memory
-                  Legion::Logging.warn '[dream] skipping cycle: lex-memory not available'
+                  log.warn('[dream] skipping cycle: lex-memory not available')
                   return { status: :skipped, reason: :memory_not_available }
                 end
 
@@ -51,13 +51,13 @@ module Legion
                 store = memory.send(:default_store)
                 store.reload if store.respond_to?(:reload)
 
-                Legion::Logging.info '[dream] cycle starting'
+                log.info('[dream] cycle starting')
                 Helpers::Constants::DREAM_CYCLE_PHASES.each do |phase|
-                  Legion::Logging.debug "[dream] starting phase: #{phase}"
+                  log.debug("[dream] starting phase: #{phase}")
                   results[phase] = send(:"phase_#{phase}")
                 rescue StandardError => e
-                  Legion::Logging.error "[dream] phase #{phase} failed: #{e.message}"
-                  Legion::Logging.error "[dream] #{e.backtrace&.first(3)&.join("\n")}"
+                  log.error("[dream] phase #{phase} failed: #{e.message}")
+                  log.error("[dream] #{e.backtrace&.first(3)&.join("\n")}")
                   results[phase] = { error: e.message }
                 end
                 # Flush cache-backed store after all phases
@@ -67,7 +67,7 @@ module Legion
                 # Write human-readable dream journal before clearing state
                 Helpers::DreamJournal.write_entry(results: results, phase_data: @phase_data, dream_store: dream_store)
 
-                Legion::Logging.info "[dream] cycle complete: #{results.keys.join(', ')}"
+                log.info("[dream] cycle complete: #{results.keys.join(', ')}")
                 { status: :completed, phases: results }
               end
 
@@ -89,8 +89,8 @@ module Legion
                 unresolved = store.all_traces.select(&EMERGENT_UNRESOLVED)
                 @phase_data[:unresolved_traces] = unresolved
 
-                Legion::Logging.debug "[dream] memory_audit: decayed=#{decay_result[:decayed]} pruned=#{decay_result[:pruned]} " \
-                                      "migrated=#{migrate_result[:migrated]} candidates=#{candidates.size} unresolved=#{unresolved.size}"
+                log.debug("[dream] memory_audit: decayed=#{decay_result[:decayed]} pruned=#{decay_result[:pruned]} " \
+                          "migrated=#{migrate_result[:migrated]} candidates=#{candidates.size} unresolved=#{unresolved.size}")
                 {
                   decayed:                  decay_result[:decayed],
                   pruned:                   decay_result[:pruned],
@@ -124,7 +124,7 @@ module Legion
                 end
 
                 @phase_data[:walk_results] = results
-                Legion::Logging.debug "[dream] association_walk: start=#{start_trace[:trace_id][0..7]} results=#{results.size}"
+                log.debug("[dream] association_walk: start=#{start_trace[:trace_id][0..7]} results=#{results.size}")
                 { walk_results: results, start_trace: start_trace[:trace_id] }
               end
 
@@ -155,8 +155,8 @@ module Legion
 
                 @phase_data[:contradictions] = resolutions
                 resolved_count = resolutions.count { |r| r[:resolution] == :resolved }
-                Legion::Logging.debug "[dream] contradiction_resolution: detected=#{detected.size} " \
-                                      "resolved=#{resolved_count} llm=#{use_llm}"
+                log.debug("[dream] contradiction_resolution: detected=#{detected.size} " \
+                          "resolved=#{resolved_count} llm=#{use_llm}")
                 { detected: detected.size, resolutions: resolutions }
               end
 
@@ -200,7 +200,7 @@ module Legion
 
               def phase_identity_entropy_check(**)
                 unless identity
-                  Legion::Logging.warn '[dream] skipping identity_entropy_check: lex-identity not available'
+                  log.warn('[dream] skipping identity_entropy_check: lex-identity not available')
                   return { status: :skipped, reason: :identity_not_available }
                 end
 
@@ -211,7 +211,7 @@ module Legion
                   trend:          result[:trend]
                 )
                 @phase_data[:entropy] = result
-                Legion::Logging.debug "[dream] identity_entropy: #{result[:classification]} trend=#{result[:trend]}"
+                log.debug("[dream] identity_entropy: #{result[:classification]} trend=#{result[:trend]}")
                 result
               end
 
@@ -245,17 +245,17 @@ module Legion
                     gap_result = Legion::Extensions::MindGrowth::Runners::DreamIdeation.dream_agenda_items
                     if gap_result[:success] && gap_result[:items]&.any?
                       items.concat(gap_result[:items])
-                      Legion::Logging.debug "[dream] mind_growth injected #{gap_result[:count]} architectural gap items"
+                      log.debug("[dream] mind_growth injected #{gap_result[:count]} architectural gap items")
                     end
                   rescue StandardError => e
-                    Legion::Logging.warn "[dream] mind_growth integration failed: #{e.message}"
+                    log.warn("[dream] mind_growth integration failed: #{e.message}")
                   end
                 end
 
                 items.each do |item|
                   dream_store.add_agenda_item(type: item[:type], content: item[:content], weight: item[:weight])
                 end
-                Legion::Logging.debug "[dream] agenda_formation: #{items.size} items (llm=#{Helpers::LlmEnhancer.available?})"
+                log.debug("[dream] agenda_formation: #{items.size} items (llm=#{Helpers::LlmEnhancer.available?})")
                 { agenda_items: items.size }
               end
 
@@ -276,7 +276,7 @@ module Legion
 
                 dream_store.expire_stale!
                 dream_store.clear
-                Legion::Logging.info "[dream] consolidation_commit: #{traces.size} traces written to memory"
+                log.info("[dream] consolidation_commit: #{traces.size} traces written to memory")
                 { traces_written: traces.size, dream_store_cleared: true }
               end
 
@@ -286,10 +286,10 @@ module Legion
                 runner = Object.new.extend(Legion::Extensions::Apollo::Runners::Knowledge)
                 promoted = promote_novel_associations(runner) + promote_resolved_contradictions(runner)
 
-                Legion::Logging.debug "[dream] knowledge_promotion: promoted=#{promoted}"
+                log.debug("[dream] knowledge_promotion: promoted=#{promoted}")
                 { promoted: promoted }
               rescue StandardError => e
-                Legion::Logging.warn "[dream] knowledge_promotion failed: #{e.message}"
+                log.warn("[dream] knowledge_promotion failed: #{e.message}")
                 { status: :error, error: e.message }
               end
 
@@ -300,7 +300,7 @@ module Legion
                 result = reflection_runner.reflect(tick_results: @phase_data)
 
                 @phase_data[:dream_health] = result[:cognitive_health]
-                Legion::Logging.debug "[dream] dream_reflection: health=#{result[:cognitive_health]} reflections=#{result[:reflections_generated]}"
+                log.debug("[dream] dream_reflection: health=#{result[:cognitive_health]} reflections=#{result[:reflections_generated]}")
                 result
               end
 
@@ -310,7 +310,7 @@ module Legion
                 narrator_runner = Object.new.extend(Legion::Extensions::Narrator::Runners::Narrator)
                 result = narrator_runner.narrate(tick_results: @phase_data, cognitive_state: { source: :dream })
 
-                Legion::Logging.debug "[dream] dream_narration: mood=#{result[:mood]}"
+                log.debug("[dream] dream_narration: mood=#{result[:mood]}")
                 result
               end
 
@@ -327,24 +327,24 @@ module Legion
               end
 
               def reflection_available?
-                Legion::Extensions.const_defined?(:Reflection) &&
-                  Legion::Extensions::Reflection.const_defined?(:Runners) &&
-                  Legion::Extensions::Reflection::Runners.const_defined?(:Reflection)
-              rescue StandardError
+                Legion::Extensions.const_defined?(:Reflection, false) &&
+                  Legion::Extensions::Reflection.const_defined?(:Runners, false) &&
+                  Legion::Extensions::Reflection::Runners.const_defined?(:Reflection, false)
+              rescue StandardError => _e
                 false
               end
 
               def narrator_available?
-                Legion::Extensions.const_defined?(:Narrator) &&
-                  Legion::Extensions::Narrator.const_defined?(:Runners) &&
-                  Legion::Extensions::Narrator::Runners.const_defined?(:Narrator)
-              rescue StandardError
+                Legion::Extensions.const_defined?(:Narrator, false) &&
+                  Legion::Extensions::Narrator.const_defined?(:Runners, false) &&
+                  Legion::Extensions::Narrator::Runners.const_defined?(:Narrator, false)
+              rescue StandardError => _e
                 false
               end
 
               def mind_growth_available?
                 defined?(Legion::Extensions::MindGrowth::Runners::DreamIdeation)
-              rescue StandardError
+              rescue StandardError => _e
                 false
               end
 
@@ -357,7 +357,7 @@ module Legion
                   path_traces = walk[:path]&.filter_map { |id| store.get(id) }
                   next if path_traces.size < 2
 
-                  payloads = path_traces.map { |t| summarize_trace_payload(t) }.compact
+                  payloads = path_traces.filter_map { |t| summarize_trace_payload(t) }
                   next if payloads.empty?
 
                   knowledge_runner.handle_ingest(
@@ -396,7 +396,7 @@ module Legion
               def apollo_available?
                 defined?(Legion::Extensions::Apollo::Runners::Knowledge) &&
                   defined?(Legion::Data::Model::ApolloEntry)
-              rescue StandardError
+              rescue StandardError => _e
                 false
               end
 

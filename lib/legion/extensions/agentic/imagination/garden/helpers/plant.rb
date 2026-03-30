@@ -102,7 +102,7 @@ module Legion
               end
 
               def resolve_stage
-                STAGE_THRESHOLDS.to_a.reverse.each do |stage, threshold|
+                STAGE_THRESHOLDS.to_a.reverse_each do |stage, threshold|
                   return stage if @health >= threshold
                 end
                 :seed

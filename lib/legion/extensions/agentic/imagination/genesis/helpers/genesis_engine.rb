@@ -8,6 +8,7 @@ module Legion
           module Helpers
             class GenesisEngine
               include Constants
+              include Legion::Logging::Helper
 
               attr_reader :seeds, :concepts, :genesis_events
 
@@ -29,8 +30,8 @@ module Legion
                   viability:             viability
                 )
                 @seeds[seed.seed_id] = seed
-                Legion::Logging.debug "[cognitive_genesis] planted seed #{seed.seed_id[0..7]} " \
-                                      "domain=#{domain} novelty=#{novelty_score.round(3)}"
+                log.debug("[cognitive_genesis] planted seed #{seed.seed_id[0..7]} " \
+                          "domain=#{domain} novelty=#{novelty_score.round(3)}")
                 { planted: true, seed_id: seed.seed_id, seed: seed.to_h }
               end
 
@@ -41,8 +42,8 @@ module Legion
                 seed.germination_potential = (seed.germination_potential + boost).clamp(0.0, 1.0).round(10)
                 seed.viability             = compute_viability(seed)
 
-                Legion::Logging.debug "[cognitive_genesis] germinated #{seed_id[0..7]} " \
-                                      "potential=#{seed.germination_potential.round(3)}"
+                log.debug("[cognitive_genesis] germinated #{seed_id[0..7]} " \
+                          "potential=#{seed.germination_potential.round(3)}")
                 { germinated: true, seed_id: seed_id,
                   germination_potential: seed.germination_potential,
                   viability:             seed.viability,
@@ -67,8 +68,8 @@ module Legion
                 @seeds.delete(seed_id)
                 record_genesis_event(concept: concept, seed: seed)
 
-                Legion::Logging.info "[cognitive_genesis] concept born: \"#{name}\" " \
-                                     "(#{concept.concept_id[0..7]}) domain=#{seed.domain}"
+                log.info("[cognitive_genesis] concept born: \"#{name}\" " \
+                         "(#{concept.concept_id[0..7]}) domain=#{seed.domain}")
                 { birthed: true, concept_id: concept.concept_id, concept: concept.to_h }
               end
 
@@ -77,8 +78,8 @@ module Legion
                 return { nurtured: false, reason: :not_found } unless concept
 
                 concept.nurture!(boost: boost)
-                Legion::Logging.debug "[cognitive_genesis] nurtured #{concept_id[0..7]} " \
-                                      "maturity=#{concept.maturity.round(3)}"
+                log.debug("[cognitive_genesis] nurtured #{concept_id[0..7]} " \
+                          "maturity=#{concept.maturity.round(3)}")
                 { nurtured: true, concept_id: concept_id,
                   maturity: concept.maturity, label: concept.maturity_label }
               end
@@ -87,7 +88,7 @@ module Legion
                 seed = @seeds.delete(seed_id)
                 return { pruned: false, reason: :not_found } unless seed
 
-                Legion::Logging.debug "[cognitive_genesis] pruned seed #{seed_id[0..7]}"
+                log.debug("[cognitive_genesis] pruned seed #{seed_id[0..7]}")
                 { pruned: true, seed_id: seed_id }
               end
 
@@ -100,8 +101,8 @@ module Legion
                 child_novelty  = cross_novelty(seed_a.novelty_score, seed_b.novelty_score)
                 result         = plant_cross_child(seed_a, seed_b, child_novelty)
 
-                Legion::Logging.debug '[cognitive_genesis] cross_pollinated ' \
-                                      "#{seed_id_a[0..7]}+#{seed_id_b[0..7]} -> #{result[:seed_id]&.slice(0, 8)}"
+                log.debug('[cognitive_genesis] cross_pollinated ' \
+                          "#{seed_id_a[0..7]}+#{seed_id_b[0..7]} -> #{result[:seed_id]&.slice(0, 8)}")
                 result.merge(cross_pollinated: true, parent_seed_ids: [seed_id_a, seed_id_b])
               end
 
@@ -110,8 +111,8 @@ module Legion
                 return { adopted: false, reason: :not_found } unless concept
 
                 concept.adopt!
-                Legion::Logging.debug "[cognitive_genesis] adopted #{concept_id[0..7]} " \
-                                      "count=#{concept.adoption_count}"
+                log.debug("[cognitive_genesis] adopted #{concept_id[0..7]} " \
+                          "count=#{concept.adoption_count}")
                 { adopted: true, concept_id: concept_id,
                   adoption_count: concept.adoption_count,
                   utility_score:  concept.utility_score,

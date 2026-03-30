@@ -9,6 +9,8 @@ module Legion
         module Dream
           module Helpers
             module DreamJournal
+              extend Legion::Logging::Helper
+
               JOURNAL_DIR = File.join(Dir.pwd, 'logs', 'dreams')
 
               module_function
@@ -22,10 +24,10 @@ module Legion
                 content = build_entry(results, phase_data, dream_store)
                 File.write(path, content)
 
-                Legion::Logging.info "[dream] journal written to #{path}"
+                log.info("[dream] journal written to #{path}")
                 path
               rescue StandardError => e
-                Legion::Logging.warn "[dream] journal write failed: #{e.message}"
+                log.warn("[dream] journal write failed: #{e.message}")
                 nil
               end
 
@@ -56,7 +58,7 @@ module Legion
                 lines << '---'
                 lines << ''
               rescue StandardError => e
-                Legion::Logging.debug "[dream] journal narrative skipped: #{e.message}"
+                log.debug("[dream] journal narrative skipped: #{e.message}")
               end
 
               def section_memory_audit(lines, results, phase_data)

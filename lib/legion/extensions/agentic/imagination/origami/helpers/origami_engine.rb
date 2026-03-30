@@ -7,6 +7,8 @@ module Legion
         module Origami
           module Helpers
             class OrigamiEngine
+              include Legion::Logging::Helper
+
               def initialize
                 @figures = {}
               end
@@ -26,14 +28,14 @@ module Legion
                 figure = fetch_figure!(id)
                 fold_type_sym = fold_type.to_sym
                 crease = figure.fold!(fold_type_sym, axis)
-                Legion::Logging.debug "[cognitive_origami] fold: id=#{id[0..7]} type=#{fold_type_sym} axis=#{axis} fold_count=#{figure.fold_count}"
+                log.debug("[cognitive_origami] fold: id=#{id[0..7]} type=#{fold_type_sym} axis=#{axis} fold_count=#{figure.fold_count}")
                 { success: true, figure_id: id, crease: crease.to_h, fold_count: figure.fold_count }
               end
 
               def unfold_figure(id:)
                 figure = fetch_figure!(id)
                 result = figure.unfold!
-                Legion::Logging.debug "[cognitive_origami] unfold: id=#{id[0..7]} fold_count=#{figure.fold_count} result=#{result}"
+                log.debug("[cognitive_origami] unfold: id=#{id[0..7]} fold_count=#{figure.fold_count} result=#{result}")
                 { success: result, figure_id: id, fold_count: figure.fold_count, fully_unfolded: figure.fully_unfolded? }
               end
 
@@ -46,7 +48,7 @@ module Legion
                   crease = figure.fold!(fold_type_sym, axis)
                   applied << crease.to_h
                 end
-                Legion::Logging.debug "[cognitive_origami] batch_fold: id=#{id[0..7]} applied=#{applied.size} fold_count=#{figure.fold_count}"
+                log.debug("[cognitive_origami] batch_fold: id=#{id[0..7]} applied=#{applied.size} fold_count=#{figure.fold_count}")
                 { success: true, figure_id: id, applied_count: applied.size, fold_count: figure.fold_count, creases: applied }
               end
 
@@ -68,7 +70,7 @@ module Legion
                     softened_count += 1
                   end
                 end
-                Legion::Logging.debug "[cognitive_origami] soften_all_creases: softened=#{softened_count}"
+                log.debug("[cognitive_origami] soften_all_creases: softened=#{softened_count}")
                 { softened_count: softened_count }
               end
 

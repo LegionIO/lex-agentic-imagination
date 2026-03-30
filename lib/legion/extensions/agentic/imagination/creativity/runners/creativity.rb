@@ -7,8 +7,8 @@ module Legion
         module Creativity
           module Runners
             module Creativity
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def creative_tick(tick_results: {}, **)
                 seeds = harvest_seeds(tick_results)
@@ -17,8 +17,8 @@ module Legion
                 emerged = creative_engine.incubate
                 store   = creative_engine.idea_store
 
-                Legion::Logging.debug "[creativity] tick: seeds=#{seeds.size} emerged=#{emerged.size} " \
-                                      "active=#{store.active_count} potential=#{creative_engine.creative_potential.round(3)}"
+                log.debug("[creativity] tick: seeds=#{seeds.size} emerged=#{emerged.size} " \
+                          "active=#{store.active_count} potential=#{creative_engine.creative_potential.round(3)}")
 
                 {
                   emerged_count:      emerged.size,
@@ -32,8 +32,8 @@ module Legion
               def diverge(prompt:, count: 5, **)
                 ideas = creative_engine.diverge(prompt: prompt, count: count)
 
-                Legion::Logging.debug "[creativity] diverge: prompt=#{prompt.inspect} count=#{ideas.size} " \
-                                      "potential=#{creative_engine.creative_potential.round(3)}"
+                log.debug("[creativity] diverge: prompt=#{prompt.inspect} count=#{ideas.size} " \
+                          "potential=#{creative_engine.creative_potential.round(3)}")
 
                 {
                   mode:      :divergent,
@@ -48,8 +48,8 @@ module Legion
                 result = creative_engine.blend(concept_a: concept_a, concept_b: concept_b)
 
                 if result[:status] == :ok
-                  Legion::Logging.debug "[creativity] blend: #{concept_a} + #{concept_b} -> " \
-                                        "novelty=#{result[:idea].novelty_score.round(3)}"
+                  log.debug("[creativity] blend: #{concept_a} + #{concept_b} -> " \
+                            "novelty=#{result[:idea].novelty_score.round(3)}")
                   {
                     status:    :ok,
                     mode:      :combinational,
@@ -57,7 +57,7 @@ module Legion
                     potential: creative_engine.creative_potential.round(4)
                   }
                 else
-                  Legion::Logging.debug "[creativity] blend rejected: #{result[:message]}"
+                  log.debug("[creativity] blend rejected: #{result[:message]}")
                   result
                 end
               end
@@ -66,7 +66,7 @@ module Legion
                 emerged = creative_engine.idea_store.by_state(:emerged)
                 ranked  = creative_engine.converge(ideas: emerged)
 
-                Legion::Logging.debug "[creativity] evaluate: #{ranked.size} ideas ranked"
+                log.debug("[creativity] evaluate: #{ranked.size} ideas ranked")
 
                 {
                   evaluated_count: ranked.size,
@@ -79,15 +79,15 @@ module Legion
                 idea = creative_engine.idea_store.ideas.find { |i| i.id == idea_id }
 
                 unless idea
-                  Legion::Logging.debug "[creativity] adopt: idea_id=#{idea_id} not found"
+                  log.debug("[creativity] adopt: idea_id=#{idea_id} not found")
                   return { status: :not_found, idea_id: idea_id }
                 end
 
                 if idea.adopt!
-                  Legion::Logging.debug "[creativity] adopt: idea_id=#{idea_id} adopted"
+                  log.debug("[creativity] adopt: idea_id=#{idea_id} adopted")
                   { status: :adopted, idea: idea.to_h }
                 else
-                  Legion::Logging.debug "[creativity] adopt: idea_id=#{idea_id} state=#{idea.state} not adoptable"
+                  log.debug("[creativity] adopt: idea_id=#{idea_id} state=#{idea.state} not adoptable")
                   { status: :not_adoptable, idea_id: idea_id, current_state: idea.state }
                 end
               end
@@ -96,8 +96,8 @@ module Legion
                 store  = creative_engine.idea_store
                 best   = store.best_ideas(limit: 3)
 
-                Legion::Logging.debug "[creativity] status: potential=#{creative_engine.creative_potential.round(3)} " \
-                                      "active=#{store.active_count}"
+                log.debug("[creativity] status: potential=#{creative_engine.creative_potential.round(3)} " \
+                          "active=#{store.active_count}")
 
                 {
                   creative_potential: creative_engine.creative_potential.round(4),
@@ -110,7 +110,7 @@ module Legion
 
               def creativity_stats(**)
                 store = creative_engine.idea_store
-                Legion::Logging.debug '[creativity] stats'
+                log.debug('[creativity] stats')
 
                 adopted   = store.by_state(:adopted)
                 discarded = store.by_state(:discarded)

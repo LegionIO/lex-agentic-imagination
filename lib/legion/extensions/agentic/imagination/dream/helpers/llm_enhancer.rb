@@ -17,7 +17,7 @@ module Legion
 
               def available?
                 defined?(Legion::LLM) && Legion::LLM.respond_to?(:started?) && Legion::LLM.started?
-              rescue StandardError
+              rescue StandardError => _e
                 false
               end
 
@@ -30,7 +30,7 @@ module Legion
                 response = llm_ask(prompt)
                 parse_contradiction_response(response, trace_a, trace_b)
               rescue StandardError => e
-                Legion::Logging.warn "[dream:llm] contradiction resolution failed: #{e.message}"
+                log.warn("[dream:llm] contradiction resolution failed: #{e.message}")
                 nil
               end
 
@@ -47,7 +47,7 @@ module Legion
                 response = llm_ask(prompt)
                 parse_agenda_response(response)
               rescue StandardError => e
-                Legion::Logging.warn "[dream:llm] agenda synthesis failed: #{e.message}"
+                log.warn("[dream:llm] agenda synthesis failed: #{e.message}")
                 nil
               end
 
@@ -59,7 +59,7 @@ module Legion
                 response = llm_ask(prompt)
                 response&.content
               rescue StandardError => e
-                Legion::Logging.warn "[dream:llm] journal narration failed: #{e.message}"
+                log.warn("[dream:llm] journal narration failed: #{e.message}")
                 nil
               end
 
@@ -75,7 +75,7 @@ module Legion
                   content = response&.message&.dig(:content)
                   ::Struct.new(:content).new(content) if content
                 else
-                  chat = Legion::LLM.chat
+                  chat = llm_chat
                   chat.with_instructions(DREAM_SYSTEM_PROMPT)
                   chat.ask(prompt)
                 end
@@ -86,7 +86,7 @@ module Legion
                 !!(defined?(Legion::LLM::Pipeline::GaiaCaller) &&
                    Legion::LLM.respond_to?(:pipeline_enabled?) &&
                    Legion::LLM.pipeline_enabled?)
-              rescue StandardError
+              rescue StandardError => _e
                 false
               end
               private_class_method :pipeline_available?

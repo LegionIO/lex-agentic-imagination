@@ -5,7 +5,7 @@ module Legion
     module Agentic
       module Imagination
         module Greenhouse
-          module Actors
+          module Actor
             class Maintenance < Legion::Extensions::Actors::Every
               def runner_class = Runners::CognitiveGreenhouse
               def runner_function = 'tend_greenhouse'

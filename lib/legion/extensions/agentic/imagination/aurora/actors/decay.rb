@@ -5,7 +5,7 @@ module Legion
     module Agentic
       module Imagination
         module Aurora
-          module Actors
+          module Actor
             class Decay < Legion::Extensions::Actors::Every
               def runner_class = Runners::CognitiveAurora
               def runner_function = 'fade_all'

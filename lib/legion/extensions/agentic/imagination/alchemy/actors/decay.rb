@@ -5,7 +5,7 @@ module Legion
     module Agentic
       module Imagination
         module Alchemy
-          module Actors
+          module Actor
             class Decay < Legion::Extensions::Actors::Every
               def runner_class = Runners::CognitiveAlchemy
               def runner_function = 'decay_all'

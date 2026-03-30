@@ -7,8 +7,8 @@ module Legion
         module Prospection
           module Runners
             module Prospection
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def imagine_future(domain:, description:, time_horizon:, predicted_valence:,
                                  predicted_arousal:, confidence: nil, **)
@@ -20,9 +20,8 @@ module Legion
                   predicted_arousal: predicted_arousal,
                   confidence:        confidence
                 )
-                Legion::Logging.debug \
-                  "[prospection] imagine: domain=#{domain} horizon=#{time_horizon}d " \
-                  "valence=#{predicted_valence.round(3)} label=#{scenario.label}"
+                log.debug("[prospection] imagine: domain=#{domain} horizon=#{time_horizon}d " \
+                          "valence=#{predicted_valence.round(3)} label=#{scenario.label}")
                 {
                   success:           true,
                   scenario_id:       scenario.id,
@@ -42,12 +41,11 @@ module Legion
                   actual_arousal: actual_arousal
                 )
                 unless scenario
-                  Legion::Logging.debug "[prospection] resolve: id=#{scenario_id} not_found_or_already_resolved"
+                  log.debug("[prospection] resolve: id=#{scenario_id} not_found_or_already_resolved")
                   return { success: false, reason: :not_found }
                 end
-                Legion::Logging.debug \
-                  "[prospection] resolve: id=#{scenario_id} domain=#{scenario.domain} " \
-                  "error=#{scenario.forecast_error&.round(3)}"
+                log.debug("[prospection] resolve: id=#{scenario_id} domain=#{scenario.domain} " \
+                          "error=#{scenario.forecast_error&.round(3)}")
                 {
                   success:        true,
                   scenario_id:    scenario.id,
@@ -60,13 +58,13 @@ module Legion
 
               def forecast_accuracy(domain: :general, **)
                 accuracy = prospection_engine.accuracy_for(domain)
-                Legion::Logging.debug "[prospection] accuracy: domain=#{domain} accuracy=#{accuracy.round(3)}"
+                log.debug("[prospection] accuracy: domain=#{domain} accuracy=#{accuracy.round(3)}")
                 { success: true, domain: domain, accuracy: accuracy.round(4) }
               end
 
               def near_future_scenarios(days: 7, **)
                 scenarios = prospection_engine.near_future(days: days)
-                Legion::Logging.debug "[prospection] near_future: days=#{days} count=#{scenarios.size}"
+                log.debug("[prospection] near_future: days=#{days} count=#{scenarios.size}")
                 {
                   success:   true,
                   days:      days,
@@ -77,7 +75,7 @@ module Legion
 
               def vivid_scenarios(count: 5, **)
                 scenarios = prospection_engine.most_vivid(count: count)
-                Legion::Logging.debug "[prospection] vivid: count=#{scenarios.size}"
+                log.debug("[prospection] vivid: count=#{scenarios.size}")
                 {
                   success:   true,
                   scenarios: scenarios.map(&:to_h),
@@ -87,7 +85,7 @@ module Legion
 
               def scenarios_in_domain(domain:, **)
                 scenarios = prospection_engine.scenarios_for(domain: domain)
-                Legion::Logging.debug "[prospection] domain_scenarios: domain=#{domain} count=#{scenarios.size}"
+                log.debug("[prospection] domain_scenarios: domain=#{domain} count=#{scenarios.size}")
                 {
                   success:   true,
                   domain:    domain,
@@ -99,17 +97,15 @@ module Legion
               def update_prospection(**)
                 prospection_engine.decay_all
                 stats = prospection_engine.to_h
-                Legion::Logging.debug \
-                  "[prospection] tick: scenarios=#{stats[:scenario_count]} " \
-                  "domains=#{stats[:domain_count]} history=#{stats[:history_size]}"
+                log.debug("[prospection] tick: scenarios=#{stats[:scenario_count]} " \
+                          "domains=#{stats[:domain_count]} history=#{stats[:history_size]}")
                 { success: true }.merge(stats)
               end
 
               def prospection_stats(**)
                 stats = prospection_engine.to_h
-                Legion::Logging.debug \
-                  "[prospection] stats: scenarios=#{stats[:scenario_count]} " \
-                  "domains=#{stats[:domain_count]}"
+                log.debug("[prospection] stats: scenarios=#{stats[:scenario_count]} " \
+                          "domains=#{stats[:domain_count]}")
                 { success: true, stats: stats }
               end
 

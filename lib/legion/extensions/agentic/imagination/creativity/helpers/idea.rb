@@ -83,7 +83,7 @@ module Legion
               private
 
               def generate_id
-                "idea_#{Time.now.utc.to_f.to_s.gsub('.', '')}_#{rand(1000)}"
+                "idea_#{Time.now.utc.to_f.to_s.delete('.')}_#{rand(1000)}"
               end
 
               def build_quality_scores(scores)

@@ -5,7 +5,7 @@ module Legion
     module Agentic
       module Imagination
         module MentalSimulation
-          module Actors
+          module Actor
             class Maintenance < Legion::Extensions::Actors::Every
               def runner_class = Runners::MentalSimulation
               def runner_function = 'prune_completed'
