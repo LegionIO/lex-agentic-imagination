@@ -24,8 +24,8 @@ module Legion
                   pressure:   pressure
                 )
 
-                Legion::Logging.debug "[cognitive_volcano] created magma type=#{magma_type} domain=#{domain} " \
-                                      "pressure=#{magma.pressure.round(2)} id=#{magma.magma_id[0..7]}"
+                log.debug("[cognitive_volcano] created magma type=#{magma_type} domain=#{domain} " \
+                          "pressure=#{magma.pressure.round(2)} id=#{magma.magma_id[0..7]}")
 
                 { success: true, magma: magma.to_h }
               rescue ArgumentError => e
@@ -39,7 +39,7 @@ module Legion
                   structural_integrity: structural_integrity
                 )
 
-                Legion::Logging.debug "[cognitive_volcano] created chamber name=#{name} id=#{chamber.chamber_id[0..7]}"
+                log.debug("[cognitive_volcano] created chamber name=#{name} id=#{chamber.chamber_id[0..7]}")
 
                 { success: true, chamber: chamber.to_h }
               rescue ArgumentError => e
@@ -50,8 +50,8 @@ module Legion
                 magma = resolve_engine(engine).pressurize_magma(magma_id: magma_id, rate: rate)
                 return { success: false, error: :magma_not_found, magma_id: magma_id } unless magma
 
-                Legion::Logging.debug "[cognitive_volcano] pressurized magma=#{magma_id[0..7]} " \
-                                      "pressure=#{magma.pressure.round(2)} critical=#{magma.critical?}"
+                log.debug("[cognitive_volcano] pressurized magma=#{magma_id[0..7]} " \
+                          "pressure=#{magma.pressure.round(2)} critical=#{magma.critical?}")
 
                 { success: true, magma: magma.to_h }
               rescue ArgumentError => e
@@ -62,10 +62,10 @@ module Legion
                 result = resolve_engine(engine).trigger_eruption(chamber_id: chamber_id)
 
                 if result[:erupted]
-                  Legion::Logging.info "[cognitive_volcano] eruption! chamber=#{chamber_id[0..7]} " \
-                                       "type=#{result[:eruption_type]} intensity=#{result[:intensity_label]}"
+                  log.info("[cognitive_volcano] eruption! chamber=#{chamber_id[0..7]} " \
+                           "type=#{result[:eruption_type]} intensity=#{result[:intensity_label]}")
                 else
-                  Legion::Logging.debug "[cognitive_volcano] no eruption chamber=#{chamber_id[0..7]} reason=#{result[:reason]}"
+                  log.debug("[cognitive_volcano] no eruption chamber=#{chamber_id[0..7]} reason=#{result[:reason]}")
                 end
 
                 result.merge(success: result[:erupted])
@@ -75,7 +75,7 @@ module Legion
 
               def list_chambers(engine: nil, **)
                 chambers = resolve_engine(engine).all_chambers.map(&:to_h)
-                Legion::Logging.debug "[cognitive_volcano] list_chambers count=#{chambers.size}"
+                log.debug("[cognitive_volcano] list_chambers count=#{chambers.size}")
                 { success: true, chambers: chambers, count: chambers.size }
               rescue ArgumentError => e
                 { success: false, error: e.message }
@@ -83,8 +83,8 @@ module Legion
 
               def pressure_status(engine: nil, **)
                 report = resolve_engine(engine).pressure_report
-                Legion::Logging.debug "[cognitive_volcano] pressure_status avg=#{report[:pressure_label]} " \
-                                      "critical=#{report[:critical_count]}"
+                log.debug("[cognitive_volcano] pressure_status avg=#{report[:pressure_label]} " \
+                          "critical=#{report[:critical_count]}")
                 report.merge(success: true)
               rescue ArgumentError => e
                 { success: false, error: e.message }

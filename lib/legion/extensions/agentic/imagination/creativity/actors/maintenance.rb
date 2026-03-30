@@ -5,7 +5,7 @@ module Legion
     module Agentic
       module Imagination
         module Creativity
-          module Actors
+          module Actor
             class Maintenance < Legion::Extensions::Actors::Every
               def runner_class = Runners::Creativity
               def runner_function = 'creative_tick'

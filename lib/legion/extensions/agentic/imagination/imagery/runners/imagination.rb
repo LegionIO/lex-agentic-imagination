@@ -7,8 +7,8 @@ module Legion
         module Imagery
           module Runners
             module Imagination
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def simulate(actions:, context: {}, mode: :prospective, risk_tolerance: :moderate, **)
                 return nil unless Helpers::Constants::MODES.include?(mode.to_sym)
@@ -34,8 +34,8 @@ module Legion
 
                 simulation_store.store(simulation)
 
-                Legion::Logging.debug "[imagination] simulated #{scenarios.size} scenarios, " \
-                                      "recommended=#{recommendation&.action || 'none'}"
+                log.debug("[imagination] simulated #{scenarios.size} scenarios, " \
+                          "recommended=#{recommendation&.action || 'none'}")
 
                 simulation
               end
@@ -46,8 +46,8 @@ module Legion
                 chain = build_consequence_chain(scenario, actual_depth)
                 scenario.evaluate
 
-                Legion::Logging.debug "[imagination] what_if: action=#{action} depth=#{actual_depth} " \
-                                      "ev=#{scenario.expected_value.round(2)}"
+                log.debug("[imagination] what_if: action=#{action} depth=#{actual_depth} " \
+                          "ev=#{scenario.expected_value.round(2)}")
 
                 {
                   scenario:          scenario.to_h,
@@ -66,7 +66,7 @@ module Legion
                 winner = scenario_a.evaluation[:composite] >= scenario_b.evaluation[:composite] ? :a : :b
                 margin = (scenario_a.evaluation[:composite] - scenario_b.evaluation[:composite]).abs
 
-                Legion::Logging.debug "[imagination] compare: #{action_a} vs #{action_b} -> winner=#{winner} margin=#{margin.round(3)}"
+                log.debug("[imagination] compare: #{action_a} vs #{action_b} -> winner=#{winner} margin=#{margin.round(3)}")
 
                 {
                   scenario_a: scenario_a.to_h,
@@ -82,7 +82,7 @@ module Legion
                 if result.nil?
                   { error: :not_found }
                 else
-                  Legion::Logging.info "[imagination] outcome recorded: simulation=#{simulation_id} accurate=#{result}"
+                  log.info("[imagination] outcome recorded: simulation=#{simulation_id} accurate=#{result}")
                   { simulation_id: simulation_id, accurate: result, overall_accuracy: simulation_store.simulation_accuracy }
                 end
               end

@@ -10,7 +10,7 @@ module Legion
               include Legion::Extensions::Helpers::Lex if defined?(Legion::Extensions::Helpers::Lex)
 
               def create_journey(journey_type:, domain:, destination:, temporal_target:, perspective: :field, **)
-                Legion::Logging.debug "[mental_time_travel] create_journey type=#{journey_type} domain=#{domain}"
+                log.debug("[mental_time_travel] create_journey type=#{journey_type} domain=#{domain}")
                 journey = traveler.create_journey(
                   journey_type:    journey_type,
                   domain:          domain,
@@ -24,7 +24,7 @@ module Legion
               end
 
               def add_journey_waypoint(journey_id:, description:, temporal_distance:, **)
-                Legion::Logging.debug "[mental_time_travel] add_waypoint journey=#{journey_id[0..7]}"
+                log.debug("[mental_time_travel] add_waypoint journey=#{journey_id[0..7]}")
                 traveler.add_waypoint(
                   journey_id:        journey_id,
                   description:       description,
@@ -34,51 +34,51 @@ module Legion
               end
 
               def travel_to(journey_id:, **)
-                Legion::Logging.debug "[mental_time_travel] travel_to journey=#{journey_id[0..7]}"
+                log.debug("[mental_time_travel] travel_to journey=#{journey_id[0..7]}")
                 traveler.travel(journey_id: journey_id)
               end
 
               def arrive_at(journey_id:, **)
-                Legion::Logging.debug "[mental_time_travel] arrive_at journey=#{journey_id[0..7]}"
+                log.debug("[mental_time_travel] arrive_at journey=#{journey_id[0..7]}")
                 traveler.arrive(journey_id: journey_id)
               end
 
               def reflect_on(journey_id:, **)
-                Legion::Logging.debug "[mental_time_travel] reflect_on journey=#{journey_id[0..7]}"
+                log.debug("[mental_time_travel] reflect_on journey=#{journey_id[0..7]}")
                 result = traveler.reflect(journey_id: journey_id)
-                Legion::Logging.debug "[mental_time_travel] narrative_coherence=#{result[:narrative_coherence]}"
+                log.debug("[mental_time_travel] narrative_coherence=#{result[:narrative_coherence]}")
                 result
               end
 
               def complete_journey(journey_id:, **)
-                Legion::Logging.debug "[mental_time_travel] complete_journey journey=#{journey_id[0..7]}"
+                log.debug("[mental_time_travel] complete_journey journey=#{journey_id[0..7]}")
                 traveler.complete_journey(journey_id: journey_id)
               end
 
               def retrospect(domain:, waypoints:, **)
-                Legion::Logging.debug "[mental_time_travel] retrospect domain=#{domain} waypoints=#{waypoints.size}"
+                log.debug("[mental_time_travel] retrospect domain=#{domain} waypoints=#{waypoints.size}")
                 journey = traveler.retrospect(domain: domain, waypoints: waypoints)
                 build_journey_result(journey)
               end
 
               def prospect(domain:, waypoints:, **)
-                Legion::Logging.debug "[mental_time_travel] prospect domain=#{domain} waypoints=#{waypoints.size}"
+                log.debug("[mental_time_travel] prospect domain=#{domain} waypoints=#{waypoints.size}")
                 journey = traveler.prospect(domain: domain, waypoints: waypoints)
                 build_journey_result(journey)
               end
 
               def emotional_arc(journey_id:, **)
-                Legion::Logging.debug "[mental_time_travel] emotional_arc journey=#{journey_id[0..7]}"
+                log.debug("[mental_time_travel] emotional_arc journey=#{journey_id[0..7]}")
                 traveler.emotional_arc_for(journey_id: journey_id)
               end
 
               def confabulation_report(**)
-                Legion::Logging.debug '[mental_time_travel] confabulation_report'
+                log.debug('[mental_time_travel] confabulation_report')
                 { success: true }.merge(traveler.confabulation_report)
               end
 
               def autonoetic_status(**)
-                Legion::Logging.debug '[mental_time_travel] autonoetic_status'
+                log.debug('[mental_time_travel] autonoetic_status')
                 {
                   success:          true,
                   autonoetic_level: traveler.autonoetic_level,
@@ -88,13 +88,13 @@ module Legion
               end
 
               def update_mental_time_travel(**)
-                Legion::Logging.debug '[mental_time_travel] update (decay tick)'
+                log.debug('[mental_time_travel] update (decay tick)')
                 traveler.decay_all
                 { success: true, journey_count: traveler.journeys.size }
               end
 
               def mental_time_travel_stats(**)
-                Legion::Logging.debug '[mental_time_travel] stats'
+                log.debug('[mental_time_travel] stats')
                 report   = traveler.confabulation_report
                 by_type  = {
                   retrospection: traveler.journeys_by_type(type: :retrospection).size,

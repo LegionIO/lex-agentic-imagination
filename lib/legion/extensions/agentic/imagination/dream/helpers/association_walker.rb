@@ -43,7 +43,7 @@ module Legion
 
                 depth_factor = depth / Constants::ASSOCIATION_WALK_HOPS.to_f
 
-                type_diversity = path.map { |id| store.get(id)&.dig(:trace_type) }.compact.uniq.size
+                type_diversity = path.filter_map { |id| store.get(id)&.dig(:trace_type) }.uniq.size
                 type_factor    = type_diversity / path.size.to_f
 
                 ((depth_factor * 0.4) + (type_factor * 0.6)).clamp(0.0, 1.0)

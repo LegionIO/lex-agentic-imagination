@@ -12,7 +12,7 @@ $LOADED_FEATURES << 'legion/extensions/actors/every'
 
 require 'legion/extensions/agentic/imagination/aurora/actors/decay'
 
-RSpec.describe Legion::Extensions::Agentic::Imagination::Aurora::Actors::Decay do
+RSpec.describe Legion::Extensions::Agentic::Imagination::Aurora::Actor::Decay do
   subject(:actor) { described_class.new }
 
   it { expect(actor.runner_class).to eq(Legion::Extensions::Agentic::Imagination::Aurora::Runners::CognitiveAurora) }

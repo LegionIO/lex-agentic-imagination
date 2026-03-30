@@ -12,7 +12,7 @@ $LOADED_FEATURES << 'legion/extensions/actors/every'
 
 require 'legion/extensions/agentic/imagination/mental_simulation/actors/maintenance'
 
-RSpec.describe Legion::Extensions::Agentic::Imagination::MentalSimulation::Actors::Maintenance do
+RSpec.describe Legion::Extensions::Agentic::Imagination::MentalSimulation::Actor::Maintenance do
   subject(:actor) { described_class.new }
 
   it { expect(actor.runner_class).to eq(Legion::Extensions::Agentic::Imagination::MentalSimulation::Runners::MentalSimulation) }

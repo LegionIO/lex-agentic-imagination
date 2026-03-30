@@ -5,7 +5,7 @@ module Legion
     module Agentic
       module Imagination
         module EmbodiedSimulation
-          module Actors
+          module Actor
             class Maintenance < Legion::Extensions::Actors::Every
               def runner_class = Runners::EmbodiedSimulation
               def runner_function = 'update_embodied_simulation'

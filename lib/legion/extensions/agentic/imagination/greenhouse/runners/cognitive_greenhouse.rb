@@ -23,7 +23,7 @@ module Legion
                   health:       health
                 )
 
-                Legion::Logging.debug "[greenhouse] planted #{plant_type} in #{domain}: #{result[:seedling][:id][0..7]}" if defined?(Legion::Logging)
+                log.debug("[greenhouse] planted #{plant_type} in #{domain}: #{result[:seedling][:id][0..7]}")
                 { success: result[:planted], result: result }
               rescue ArgumentError => e
                 { success: false, error: e.message }
@@ -32,7 +32,7 @@ module Legion
               def tend_greenhouse(engine: nil, **)
                 e = engine || default_engine
                 result = e.grow_all!
-                Legion::Logging.debug "[greenhouse] grow_all: grew=#{result[:grew]} total=#{result[:total]} season=#{result[:season]}" if defined?(Legion::Logging)
+                log.debug("[greenhouse] grow_all: grew=#{result[:grew]} total=#{result[:total]} season=#{result[:season]}")
                 { success: true, result: result }
               rescue ArgumentError => e
                 { success: false, error: e.message }
@@ -41,7 +41,7 @@ module Legion
               def adjust_environment(temperature: nil, humidity: nil, light_level: nil, engine: nil, **)
                 e = engine || default_engine
                 result = e.adjust_environment(temperature: temperature, humidity: humidity, light_level: light_level)
-                Legion::Logging.debug "[greenhouse] conditions adjusted: quality=#{result[:quality]}" if defined?(Legion::Logging)
+                log.debug("[greenhouse] conditions adjusted: quality=#{result[:quality]}")
                 { success: true, result: result }
               rescue ArgumentError => e
                 { success: false, error: e.message }
@@ -50,7 +50,7 @@ module Legion
               def advance_season(engine: nil, **)
                 e = engine || default_engine
                 result = e.cycle_season
-                Legion::Logging.debug "[greenhouse] season cycled to #{result[:season]}" if defined?(Legion::Logging)
+                log.debug("[greenhouse] season cycled to #{result[:season]}")
                 { success: true, result: result }
               rescue ArgumentError => e
                 { success: false, error: e.message }
@@ -59,7 +59,7 @@ module Legion
               def harvest_ideas(engine: nil, **)
                 e = engine || default_engine
                 result = e.harvest
-                Legion::Logging.debug "[greenhouse] harvested #{result[:harvested]} blooms" if defined?(Legion::Logging)
+                log.debug("[greenhouse] harvested #{result[:harvested]} blooms")
                 { success: true, result: result }
               rescue ArgumentError => e
                 { success: false, error: e.message }

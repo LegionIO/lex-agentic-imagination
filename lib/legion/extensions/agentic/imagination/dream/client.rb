@@ -11,7 +11,9 @@ module Legion
             attr_reader :dream_store
 
             def initialize(memory: nil, identity: nil, emotion: nil, **)
-              @memory      = memory   || (Legion::Extensions::Agentic::Memory::Trace::Client.new if defined?(Legion::Extensions::Agentic::Memory::Trace::Client))
+              @memory      = memory   || (if defined?(Legion::Extensions::Agentic::Memory::Trace::Client)
+                                            Legion::Extensions::Agentic::Memory::Trace::Client.new
+                                          end)
               @identity    = identity || (Legion::Extensions::Identity::Client.new if defined?(Legion::Extensions::Identity::Client))
               @emotion     = emotion  || (Legion::Extensions::Emotion::Client.new if defined?(Legion::Extensions::Emotion::Client))
               @dream_store = Helpers::DreamStore.new
