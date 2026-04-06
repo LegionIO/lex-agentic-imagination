@@ -14,8 +14,12 @@ module Legion
               @memory      = memory   || (if defined?(Legion::Extensions::Agentic::Memory::Trace::Client)
                                             Legion::Extensions::Agentic::Memory::Trace::Client.new
                                           end)
-              @identity    = identity || (Legion::Extensions::Identity::Client.new if defined?(Legion::Extensions::Identity::Client))
-              @emotion     = emotion  || (Legion::Extensions::Emotion::Client.new if defined?(Legion::Extensions::Emotion::Client))
+              @identity    = identity || (if defined?(Legion::Extensions::Agentic::Self::Identity::Client)
+                                            Legion::Extensions::Agentic::Self::Identity::Client.new
+                                          end)
+              @emotion     = emotion  || (if defined?(Legion::Extensions::Agentic::Affect::Emotion::Client)
+                                            Legion::Extensions::Agentic::Affect::Emotion::Client.new
+                                          end)
               @dream_store = Helpers::DreamStore.new
               @phase_data  = {}
             end

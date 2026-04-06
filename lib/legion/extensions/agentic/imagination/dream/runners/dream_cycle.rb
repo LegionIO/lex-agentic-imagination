@@ -296,7 +296,7 @@ module Legion
               def phase_dream_reflection(**)
                 return { status: :skipped, reason: :extension_not_loaded } unless reflection_available?
 
-                reflection_runner = Object.new.extend(Legion::Extensions::Reflection::Runners::Reflection)
+                reflection_runner = Object.new.extend(Legion::Extensions::Agentic::Self::Reflection::Runners::Reflection)
                 result = reflection_runner.reflect(tick_results: @phase_data)
 
                 @phase_data[:dream_health] = result[:cognitive_health]
@@ -307,7 +307,7 @@ module Legion
               def phase_dream_narration(**)
                 return { status: :skipped, reason: :extension_not_loaded } unless narrator_available?
 
-                narrator_runner = Object.new.extend(Legion::Extensions::Narrator::Runners::Narrator)
+                narrator_runner = Object.new.extend(Legion::Extensions::Agentic::Language::Narrator::Runners::Narrator)
                 result = narrator_runner.narrate(tick_results: @phase_data, cognitive_state: { source: :dream })
 
                 log.debug("[dream] dream_narration: mood=#{result[:mood]}")
@@ -323,21 +323,25 @@ module Legion
               end
 
               def identity
-                @identity ||= Object.new.extend(Legion::Extensions::Identity::Runners::Identity) if defined?(Legion::Extensions::Identity::Runners::Identity)
+                return unless defined?(Legion::Extensions::Agentic::Self::Identity::Runners::Identity)
+
+                @identity ||= Object.new.extend(Legion::Extensions::Agentic::Self::Identity::Runners::Identity)
               end
 
               def reflection_available?
-                Legion::Extensions.const_defined?(:Reflection, false) &&
-                  Legion::Extensions::Reflection.const_defined?(:Runners, false) &&
-                  Legion::Extensions::Reflection::Runners.const_defined?(:Reflection, false)
+                defined?(Legion::Extensions::Agentic::Self) &&
+                  Legion::Extensions::Agentic::Self.const_defined?(:Reflection, false) &&
+                  Legion::Extensions::Agentic::Self::Reflection.const_defined?(:Runners, false) &&
+                  Legion::Extensions::Agentic::Self::Reflection::Runners.const_defined?(:Reflection, false)
               rescue StandardError => _e
                 false
               end
 
               def narrator_available?
-                Legion::Extensions.const_defined?(:Narrator, false) &&
-                  Legion::Extensions::Narrator.const_defined?(:Runners, false) &&
-                  Legion::Extensions::Narrator::Runners.const_defined?(:Narrator, false)
+                defined?(Legion::Extensions::Agentic::Language) &&
+                  Legion::Extensions::Agentic::Language.const_defined?(:Narrator, false) &&
+                  Legion::Extensions::Agentic::Language::Narrator.const_defined?(:Runners, false) &&
+                  Legion::Extensions::Agentic::Language::Narrator::Runners.const_defined?(:Narrator, false)
               rescue StandardError => _e
                 false
               end

@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- update dream cycle and client to use consolidated Agentic namespace paths instead of stale pre-consolidation references
+
 ## [0.1.12] - 2026-03-30
 
 ### Changed
